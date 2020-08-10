@@ -20,9 +20,11 @@
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-$plugin->version = 2020080700;
-$plugin->requires = 2020060900;
-$plugin->component = 'tool_sumitnegi';
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.1';
+require_once(__DIR__ . '/../../../config.php');
+$url = new moodle_url('/admin/tool/sumitnegi/index.php');
+$PAGE->set_context(context_system::instance());
+$PAGE->set_url($url);
+$PAGE->set_pagelayout('report');
+$PAGE->set_title('Hello to the sumitnegi tool');
+$PAGE->set_heading(get_string('pluginname', 'tool_sumitnegi'));
+echo get_string('helloworld', 'tool_sumitnegi');

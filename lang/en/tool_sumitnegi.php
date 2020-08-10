@@ -20,4 +20,5 @@
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['helloworld'] = 'Hello world';
 $string['pluginname'] = 'My first Moodle plugin';
