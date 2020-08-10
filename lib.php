@@ -14,21 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- *  tool_sumitnegi.
+ * lib file
  *
  * @package   tool_sumitnegi
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once(__DIR__ . '/../../../config.php');
-$id = optional_param('id', SITEID, PARAM_INT);
-require_login();
-$url = new moodle_url('/admin/tool/sumitnegi/index.php', ['id' => $id]);
-$PAGE->set_context(context_system::instance());
-$PAGE->set_url($url);
-$PAGE->set_pagelayout('report');
-$PAGE->set_title(get_string('title', 'tool_sumitnegi'));
-$PAGE->set_heading(get_string('pluginname', 'tool_sumitnegi'));
-echo $OUTPUT->header();
-echo html_writer::div(get_string('helloworld', 'tool_sumitnegi', $id));
-echo $OUTPUT->footer();
+
+defined('MOODLE_INTERNAL') || die;
+
+/**
+ * Extend the course navigation
+ * 
+ * @param navigation_node $parentnode
+ * @param stdClass $course
+ * @param context_course $context
+ * @return void
+ */
+function tool_sumitnegi_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
+    $url = new moodle_url('/admin/tool/sumitnegi/index.php', array('id' => $course->id));
+    $name = get_string('pluginname', 'tool_sumitnegi');
+    $parentnode->add($name, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('icon', '', 'tool_sumitnegi'));
+}

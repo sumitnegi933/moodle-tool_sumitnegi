@@ -25,4 +25,4 @@ $plugin->version = 2020080700;
 $plugin->requires = 2020060900;
 $plugin->component = 'tool_sumitnegi';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '1.2';
+$plugin->release = '1.3';
