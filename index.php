@@ -21,10 +21,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(__DIR__ . '/../../../config.php');
+$id = optional_param('id', 0, PARAM_INT);
+require_login();
 $url = new moodle_url('/admin/tool/sumitnegi/index.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('report');
-$PAGE->set_title('Hello to the sumitnegi tool');
+$PAGE->set_title(get_string('title', 'tool_sumitnegi'));
 $PAGE->set_heading(get_string('pluginname', 'tool_sumitnegi'));
-echo get_string('helloworld', 'tool_sumitnegi');
+echo $OUTPUT->header();
+echo html_writer::div(get_string('helloworld', 'tool_sumitnegi', $id));
+echo $OUTPUT->footer();
