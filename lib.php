@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die;
 
 /**
  * Extend the course navigation
- * 
+ *
  * @param navigation_node $parentnode
  * @param stdClass $course
  * @param context_course $context
