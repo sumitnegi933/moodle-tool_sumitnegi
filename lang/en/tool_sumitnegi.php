@@ -20,10 +20,16 @@
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['completed'] = 'Completed';
+$string['course'] = 'Course';
 $string['courseinfo'] = 'Course details';
 $string['helloworld'] = 'Hello world course id:{$a}';
+$string['name'] = 'Name';
+$string['pluginname'] = 'My first Moodle plugin';
+$string['priority'] = 'Priority';
+$string['timecreated'] = 'Created on';
+$string['timemodified'] = 'Last updated on';
 $string['title'] = 'Hello to the sumitnegi tool';
 $string['totalactiveusers'] = 'Total active users : {$a}';
 $string['totalinactiveusers'] = 'Total inactive users : {$a}';
 $string['totalregisteredusers'] = 'Total registered users : {$a}';
-$string['pluginname'] = 'My first Moodle plugin';
