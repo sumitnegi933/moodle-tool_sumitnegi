@@ -14,27 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * lib file
+ * tool_sumitnegi capabilities.
  *
  * @package   tool_sumitnegi
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die;
-
 /**
- * Extend the course navigation
+ * Upgrade plugin function
  *
- * @param navigation_node $parentnode
- * @param stdClass $course
- * @param context_course $context
+ * @param [type] $oldversion
  * @return void
  */
-function tool_sumitnegi_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
-    if (has_capability('tool/sumitnegi:view', $context)) {
-        $url = new moodle_url('/admin/tool/sumitnegi/index.php', array('id' => $course->id));
-        $name = get_string('pluginname', 'tool_sumitnegi');
-        $parentnode->add($name, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('icon', '', 'tool_sumitnegi'));
-    }
-}
+defined('MOODLE_INTERNAL') || die();
+$capabilities = array(
+    'tool/sumitnegi:view' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+    'tool/sumitnegi:edit' => array(
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+    ),
+ );
