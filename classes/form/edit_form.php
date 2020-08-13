@@ -25,7 +25,11 @@ defined('MOODLE_INTERNAL') || die();
 // Moodleform is defined in formslib.php.
 require_once("$CFG->libdir/formslib.php");
 /**
- * edit_form class
+ *  Edit form class.
+ *
+ * @package   tool_sumitnegi
+ * @copyright 2020, Sumit Negi
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class edit_form extends \moodleform {
     // Add elements to form.
