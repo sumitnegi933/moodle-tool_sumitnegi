@@ -23,6 +23,7 @@
 $string['completed'] = 'Completed';
 $string['course'] = 'Course';
 $string['courseinfo'] = 'Course details';
+$string['editentrytitle'] = 'Edit entry {$a}';
 $string['helloworld'] = 'Hello world course id:{$a}';
 $string['insertsuccess'] = 'Data inserted successfully';
 $string['name'] = 'Name';

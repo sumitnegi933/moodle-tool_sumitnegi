@@ -137,7 +137,13 @@ class displayinfo_table extends \table_sql {
      */
     protected function col_edit($row) {
         if ($row) {
-            return \html_writer::link(new \moodle_url('/admin/tool/sumitnegi/edit.php', ['id' => $row->id]), get_string('edit'));
+            // Edit record link.
+            $editurl = \html_writer::link(new \moodle_url('/admin/tool/sumitnegi/edit.php', ['id' => $row->id]),
+             get_string('edit'), ['title' => get_string('editentrytitle', 'tool_sumitnegi', format_string($row->name))]);
+            // Delete record link.
+            $deleteurl = \html_writer::link(new \moodle_url('/admin/tool/sumitnegi/edit.php',
+             ['delete' => $row->id, 'sesskey' => sesskey()]), get_string('delete'));
+             return $editurl . ' | ' .$deleteurl;
         }
         return '';
     }

@@ -52,7 +52,7 @@ class edit_form extends \moodleform {
         $mform->setType('courseid', PARAM_INT);
         // Text element to hold name data.
         $mform->addElement('text', 'name', get_string('name', 'tool_sumitnegi'));
-        $mform->setType('name', PARAM_TEXT);
+        $mform->setType('name', PARAM_NOTAGS);
         // Checkbox to set completion for the record.
         $mform->addElement('checkbox', 'completed', get_string('completed', 'tool_sumitnegi'));
         $this->add_action_buttons();

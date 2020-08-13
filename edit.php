@@ -21,21 +21,29 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(__DIR__ . '/../../../config.php');
-
-use tool_sumitnegi\form;
-
+use tool_sumitnegi;
 global $DB, $PAGE, $OUTPUT;
-$id = optional_param('id', 0, PARAM_INT);
-if (!$id) {
+$id = optional_param('id', null, PARAM_INT);
+$deleteid = optional_param('delete', null, PARAM_INT);
+if (!$id && !$deleteid) {
     $courseid = required_param('courseid', PARAM_INT);
 }
-if (empty($courseid)) { // Courseid is not defined, get course info with the help of record id.
+if (!empty($id)) {
     $record = $DB->get_record('tool_sumitnegi', array('id' => $id), '*', MUST_EXIST);
+    $courseid = $record->courseid;
+} else if (!empty($deleteid)) {
+    $record = $DB->get_record('tool_sumitnegi', array('id' => $deleteid), '*', MUST_EXIST);
     $courseid = $record->courseid;
 }
 require_login();
 $coursecontext = context_course::instance($courseid);
 require_capability('tool/sumitnegi:edit', $coursecontext);
+// Delete record if it is deleted request.
+if ($deleteid) {
+    require_sesskey();
+    tool_sumitnegi\api::remove($deleteid);
+    redirect(new moodle_url('/admin/tool/sumitnegi/index.php', ['courseid' => $courseid]));
+}
 $url = new moodle_url('/admin/tool/sumitnegi/edit.php', ['courseid' => $courseid]);
 $PAGE->set_context($coursecontext);
 $PAGE->set_url($url);
@@ -59,17 +67,17 @@ if ($formdata = $editform->get_data()) {
     if (!$formdata->id) {
         $data->timecreated = time();
         $data->timemodified = time();
-        if ($insertid = $DB->insert_record('tool_sumitnegi', $data)) {
+        if ($insertid = tool_sumitnegi\api::add($data)) {
             redirect(new moodle_url('/admin/tool/sumitnegi/index.php',
                 ['courseid' => $course->id]), get_string('insertsuccess', 'tool_sumitnegi'), null, 'success');
         }
-    } else { // Update record into table.
+    } else {
+        // Update record into table.
         $data->id = $formdata->id;
         $data->timemodified = time();
-        $DB->update_record('tool_sumitnegi', $data);
+        tool_sumitnegi\api::update($data);
         redirect(new moodle_url('/admin/tool/sumitnegi/index.php',
-                ['courseid' => $course->id]), get_string('updatesuccess', 'tool_sumitnegi'),
-                null, 'success');
+                ['courseid' => $course->id]), get_string('updatesuccess', 'tool_sumitnegi'), null, 'success');
     }
 }
 echo $OUTPUT->header();
