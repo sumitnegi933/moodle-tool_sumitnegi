@@ -24,9 +24,16 @@ namespace tool_sumitnegi\form;
 defined('MOODLE_INTERNAL') || die();
 // Moodleform is defined in formslib.php.
 require_once("$CFG->libdir/formslib.php");
-
+/**
+ * edit_form class
+ */
 class edit_form extends \moodleform {
     // Add elements to form.
+    /**
+     * form elements definition
+     *
+     * @return void
+     */
     public function definition() {
         global $CFG;
         $mform = $this->_form;
