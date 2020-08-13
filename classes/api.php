@@ -53,7 +53,7 @@ class api {
     /**
      * Delete record from the table
      *
-     * @param [type] $deleteid
+     * @param int $deleteid
      * @return void
      */
     public static function remove(int $deleteid) {
