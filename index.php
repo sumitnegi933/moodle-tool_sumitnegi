@@ -24,19 +24,23 @@
 require_once(__DIR__ . '/../../../config.php');
 use tool_sumitnegi\output;
 global $DB, $PAGE, $OUTPUT;
-$id = optional_param('id', SITEID, PARAM_INT);
+$courseid = optional_param('courseid', SITEID, PARAM_INT);
 require_login();
-$coursecontext = context_course::instance($id);
+$coursecontext = context_course::instance($courseid);
 require_capability('tool/sumitnegi:view', $coursecontext);
-$url = new moodle_url('/admin/tool/sumitnegi/index.php', ['id' => $id]);
+$url = new moodle_url('/admin/tool/sumitnegi/index.php', ['courseid' => $courseid]);
 $PAGE->set_context($coursecontext);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('report');
 $PAGE->set_title(get_string('title', 'tool_sumitnegi'));
 $PAGE->set_heading(get_string('pluginname', 'tool_sumitnegi'));
 echo $OUTPUT->header();
-$course = get_course($id);
+$course = get_course($courseid);
+if (has_capability('tool/sumitnegi:edit', $coursecontext)) {
+    echo $OUTPUT->single_button(new moodle_url('/admin/tool/sumitnegi/edit.php',
+        ['courseid' => $course->id]), get_string('add'), 'GET');
+}
 $table = new tool_sumitnegi\output\displayinfo_table("tool_sumitnegi", $course->id);
-$table->define_baseurl(new moodle_url('/admin/tool/sumitnegi/index.php', array('id' => $course->id)));
+$table->define_baseurl(new moodle_url('/admin/tool/sumitnegi/index.php', ['courseid' => $course->id]));
 $table->out(50, true);
 echo $OUTPUT->footer();

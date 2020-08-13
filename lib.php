@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die;
  */
 function tool_sumitnegi_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
     if (has_capability('tool/sumitnegi:view', $context)) {
-        $url = new moodle_url('/admin/tool/sumitnegi/index.php', array('id' => $course->id));
+        $url = new moodle_url('/admin/tool/sumitnegi/index.php', array('courseid' => $course->id));
         $name = get_string('pluginname', 'tool_sumitnegi');
         $parentnode->add($name, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('icon', '', 'tool_sumitnegi'));
     }

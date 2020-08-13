@@ -43,8 +43,6 @@ class displayinfo_table extends \table_sql {
 
         // Define the list of columns to show.
         $columns = ['name', 'completed', 'priority', 'timecreated', 'timemodified'];
-        $this->define_columns($columns);
-
         // Define the titles of columns to show in header.
         $headers = [
             get_string('name', 'tool_sumitnegi'),
@@ -53,6 +51,11 @@ class displayinfo_table extends \table_sql {
             get_string('timecreated', 'tool_sumitnegi'),
             get_string('timemodified', 'tool_sumitnegi')
         ];
+        if (\has_capability('tool/sumitnegi:edit', \context_course::instance($courseid))) {
+            $columns[] = 'edit';
+            $headers[] = get_string('action');
+        }
+        $this->define_columns($columns);
         $this->define_headers($headers);
         // Total number of records for specific course.
         $totalcountsql = "SELECT COUNT(id) FROM {tool_sumitnegi} WHERE courseid = :courseid";
@@ -125,5 +128,17 @@ class displayinfo_table extends \table_sql {
             return get_string('yes');
         }
         return get_string('no');
+    }
+    /**
+     * Allow edit record
+     *
+     * @param [type] $row
+     * @return string link of for editing
+     */
+    protected function col_edit($row) {
+        if ($row) {
+            return \html_writer::link(new \moodle_url('/admin/tool/sumitnegi/edit.php', ['id' => $row->id]), get_string('edit'));
+        }
+        return '';
     }
 }
