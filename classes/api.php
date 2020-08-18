@@ -60,4 +60,13 @@ class api {
         global $DB;
         return $DB->delete_records('tool_sumitnegi', ['id' => $deleteid]);
     }
+
+    /**
+     * @param int $id
+     * @return object
+     */
+    public static function get(int $id) {
+        global $DB;
+        return $DB->get_record('tool_sumitnegi', ['id' => $id], '*', IGNORE_MISSING);
+    }
 }
