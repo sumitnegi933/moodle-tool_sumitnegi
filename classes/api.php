@@ -62,6 +62,8 @@ class api {
     }
 
     /**
+     * get record from the table
+     *
      * @param int $id
      * @return object
      */
