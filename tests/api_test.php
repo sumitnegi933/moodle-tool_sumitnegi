@@ -28,7 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 /**
- * Class tool_sumitnegi_api_testcase
+ * tool_sumitnegi API tests class
+ *
+ * @package   tool_sumitnegi
+ * @copyright 2020, Sumit Negi
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool_sumitnegi_api_testcase extends advanced_testcase
 {
