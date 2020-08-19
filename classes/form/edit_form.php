@@ -21,6 +21,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace tool_sumitnegi\form;
+use tool_sumitnegi;
 defined('MOODLE_INTERNAL') || die();
 // Moodleform is defined in formslib.php.
 require_once("$CFG->libdir/formslib.php");
@@ -55,6 +56,9 @@ class edit_form extends \moodleform {
         $mform->setType('name', PARAM_NOTAGS);
         // Checkbox to set completion for the record.
         $mform->addElement('checkbox', 'completed', get_string('completed', 'tool_sumitnegi'));
+        $mform->addElement('editor', 'description_editor', get_string('description', 'tool_sumitnegi'),
+            null, tool_sumitnegi\api::editor_options());
+        $mform->setType('description', PARAM_RAW);
         $this->add_action_buttons();
     }
     /**

@@ -39,7 +39,7 @@ $capabilities = array(
         ),
     ),
     'tool/sumitnegi:edit' => array(
-        'riskbitmask' => RISK_SPAM,
+        'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(

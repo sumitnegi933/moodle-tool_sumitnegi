@@ -46,6 +46,7 @@ class tool_sumitnegi_api_testcase extends advanced_testcase
         $course = $this->getDataGenerator()->create_course();
         $data = new stdClass();
         $data->name = "Test Entry 001";
+        $data->description = 'Dummy Description';
         $data->courseid = $course->id;
         $data->timecreated = time();
         $data->timemodified = time();
@@ -56,6 +57,7 @@ class tool_sumitnegi_api_testcase extends advanced_testcase
         $this->assertEquals($course->id, $entryobj->courseid, 'Course id not matched');
         $this->assertEquals("Test Entry 001", $entryobj->name, 'Name is not matched');
         $this->assertEquals(0, $entryobj->completed, 'Completion is not matched');
+        $this->assertEquals('Dummy Description', $entryobj->description);
     }
 
     /**
@@ -69,13 +71,16 @@ class tool_sumitnegi_api_testcase extends advanced_testcase
         $entrydata = tool_sumitnegi\api::get($entryid);
         $entrydata->completed = 1;
         $entrydata->name = "Test Entry 001 V.1";
+        $entrydata->description = 'Dummy Description V.1';
         $entrydata->timemodified = time();
         tool_sumitnegi\api::update($entrydata);
         $updatedentry = tool_sumitnegi\api::get($entrydata->id);
         $this->assertEquals('Test Entry 001 V.1', $updatedentry->name, 'Name is not updated');
         $this->assertEquals(1, $updatedentry->completed, 'Completion is not updated');
         $this->assertEquals($entrydata->timemodified, $updatedentry->timemodified, 'Entry modification time is not updated');
+        $this->assertEquals('Dummy Description V.1', $updatedentry->description);
     }
+
     /**
      * Test deletion of entry
      *
@@ -98,6 +103,7 @@ class tool_sumitnegi_api_testcase extends advanced_testcase
         $course = $this->getDataGenerator()->create_course();
         $data = new stdClass();
         $data->name = "Test Entry 001";
+        $data->description = 'Dummy Description';
         $data->courseid = $course->id;
         $data->timecreated = time();
         $data->timemodified = time();

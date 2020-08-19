@@ -20,8 +20,10 @@
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace tool_sumitnegi;
 defined('MOODLE_INTERNAL') || die;
+
 /**
  * sumitnegi tool locallib
  *
@@ -34,22 +36,65 @@ class api {
      * Add record to table
      *
      * @param stdClass $data
-     * @return void
+     * @return int
      */
     public static function add(\stdClass $data) {
-        global $DB;
-        return $DB->insert_record('tool_sumitnegi', $data);
+        global $DB, $PAGE;
+        $entry = new \stdClass();
+        $entry->name = $data->name;
+        $entry->completed = $data->completed ?? 0;
+        $entry->courseid = $data->courseid;
+        $entry->timecreated = time();
+        $entry->timemodified = time();
+        if ($entryid = $DB->insert_record('tool_sumitnegi', $entry)) {
+            $context = \context_course::instance($data->courseid);
+            $upateentry = new \stdClass();
+            $upateentry->id = $entryid;
+            if ($data->description_editor) {
+                $data = file_postupdate_standard_editor($data, 'description', self::editor_options(),
+                    $context, 'tool_sumitnegi', 'entry', $entryid);
+                $upateentry->description = $data['description'];
+                $upateentry->descriptionformat = 1;
+            }
+            self::update($upateentry, true);
+            return $entryid;
+        }
+        return 0;
     }
+
     /**
-     * Update existing record
+     * Update record
      *
-     * @param stdClass $data
-     * @return void
+     * @param \stdClass $data
+     * @param false $skipdescription
+     * @return bool
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
-    public static function update(\stdClass $data) {
+    public static function update(\stdClass $data, $skipdescription = false) {
         global $DB;
-        return $DB->update_record('tool_sumitnegi', $data);
+        if (!$data->id) {
+            print_error("Data must have id in order to update");
+        }
+        if (!$skipdescription) {
+            $entry = new \stdClass();
+            $entry->id = $data->id;
+            $entry->name = $data->name;
+            $entry->completed = $data->completed ?? 0;
+            $entry->timemodified = time();
+            if ($data->description_editor) {
+                $context = \context_course::instance($data->courseid);
+                $data = file_postupdate_standard_editor($data, 'description', self::editor_options(),
+                    $context, 'tool_sumitnegi', 'entry', $data->id);
+                $entry->description = $data->description;
+                $entry->descriptionformat = 1;
+            }
+        } else {
+            $entry = $data;
+        }
+        return $DB->update_record('tool_sumitnegi', $entry);
     }
+
     /**
      * Delete record from the table
      *
@@ -58,7 +103,7 @@ class api {
      */
     public static function remove(int $deleteid) {
         global $DB;
-        return $DB->delete_records('tool_sumitnegi', ['id' => $deleteid]);
+        $DB->delete_records('tool_sumitnegi', ['id' => $deleteid]);
     }
 
     /**
@@ -70,5 +115,21 @@ class api {
     public static function get(int $id) {
         global $DB;
         return $DB->get_record('tool_sumitnegi', ['id' => $id], '*', IGNORE_MISSING);
+    }
+
+    /**
+     * Description format options
+     *
+     * @return array
+     */
+    public static function editor_options() {
+        global $PAGE;
+        return [
+            'maxfiles' => -1,
+            'maxbytes' => 0,
+            'context' => $PAGE->context,
+            'noclean' => true,
+            'format' => 1
+        ];
     }
 }

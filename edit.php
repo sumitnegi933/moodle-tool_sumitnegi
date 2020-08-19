@@ -21,7 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(__DIR__ . '/../../../config.php');
+
 use tool_sumitnegi;
+
 global $DB, $PAGE, $OUTPUT;
 $id = optional_param('id', null, PARAM_INT);
 $deleteid = optional_param('delete', null, PARAM_INT);
@@ -53,31 +55,26 @@ $PAGE->set_heading(get_string('pluginname', 'tool_sumitnegi'));
 $course = get_course($courseid);
 $editform = new tool_sumitnegi\form\edit_form('', ['courseid' => $course->id, 'id' => $id]);
 if (!empty($record)) {
+    $record = file_prepare_standard_editor($record, 'description',
+        tool_sumitnegi\api::editor_options(),
+        $PAGE->context, 'tool_devcourse', 'entry', $record->id);
     $editform->set_data($record);
 }
 if ($editform->is_cancelled()) {
     redirect(new moodle_url('/admin/tool/sumitnegi/index.php', array('courseid' => $courseid)));
 }
 if ($formdata = $editform->get_data()) {
-    $data = new stdClass();
-    $data->name = $formdata->name;
-    $data->completed = $formdata->completed ?? 0;
-    $data->courseid = $course->id;
     // Insert new record into table.
     if (!$formdata->id) {
-        $data->timecreated = time();
-        $data->timemodified = time();
-        if ($insertid = tool_sumitnegi\api::add($data)) {
+        if ($insertid = tool_sumitnegi\api::add($formdata)) {
             redirect(new moodle_url('/admin/tool/sumitnegi/index.php',
                 ['courseid' => $course->id]), get_string('insertsuccess', 'tool_sumitnegi'), null, 'success');
         }
     } else {
         // Update record into table.
-        $data->id = $formdata->id;
-        $data->timemodified = time();
-        tool_sumitnegi\api::update($data);
+        tool_sumitnegi\api::update($formdata);
         redirect(new moodle_url('/admin/tool/sumitnegi/index.php',
-                ['courseid' => $course->id]), get_string('updatesuccess', 'tool_sumitnegi'), null, 'success');
+            ['courseid' => $course->id]), get_string('updatesuccess', 'tool_sumitnegi'), null, 'success');
     }
 }
 echo $OUTPUT->header();

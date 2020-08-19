@@ -23,6 +23,7 @@ Feature: My first behat test with the plugin
     And I set the following fields to these values:
       | Name      | Behat entry 1 |
       | Completed | 0             |
+      | description | "Dummy Description"|
     And I press "Save changes"
     And I click on "Edit" "link" in the "Behat entry 1" "table_row"
     And I set the following fields to these values:
@@ -39,6 +40,7 @@ Feature: My first behat test with the plugin
     And I set the following fields to these values:
       | Name      | Behat entry 1 |
       | Completed | 0             |
+      | description | "Updated Dummy Description"|
     And I press "Save changes"
     And I click on "Delete" "link" in the "Behat entry 1" "table_row"
     And I should not see "Behat entry 1"

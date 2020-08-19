@@ -74,5 +74,28 @@ function xmldb_tool_sumitnegi_upgrade($oldversion) {
         // Sumitnegi savepoint reached.
         upgrade_plugin_savepoint(true, 2020080702, 'tool', 'sumitnegi');
     }
+
+    if ($oldversion < 2020081900) {
+        // Define field description to be added to tool_sumitnegi.
+        $table = new xmldb_table('tool_sumitnegi');
+        $field = new xmldb_field('description', XMLDB_TYPE_TEXT, null, null, null, null, null, 'priority');
+
+        // Conditionally launch add field description.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define field descriptionformat to be added to tool_sumitnegi.
+        $table = new xmldb_table('tool_sumitnegi');
+        $field = new xmldb_field('descriptionformat', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'description');
+
+        // Conditionally launch add field descriptionformat.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Sumitnegi savepoint reached.
+        upgrade_plugin_savepoint(true, 2020081900, 'tool', 'sumitnegi');
+    }
+
     return true;
 }

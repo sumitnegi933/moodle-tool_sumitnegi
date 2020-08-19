@@ -38,3 +38,55 @@ function tool_sumitnegi_extend_navigation_course(navigation_node $parentnode, st
         $parentnode->add($name, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('icon', '', 'tool_sumitnegi'));
     }
 }
+
+/**
+ * Serve the embedded files.
+ *
+ * @param stdClass $course the course object
+ * @param stdClass $cm the course module object
+ * @param context $context the context
+ * @param string $filearea the name of the file area
+ * @param array $args extra arguments (itemid, path)
+ * @param bool $forcedownload whether or not force download
+ * @param array $options additional options affecting the file serving
+ * @return bool false if the file not found, just send the file otherwise and do not return anything
+ */
+function tool_sumitnegi_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options) {
+    // Check the contextlevel is as expected.
+    if ($context->contextlevel != CONTEXT_COURSE) {
+        return false;
+    }
+
+    // Make sure the filearea is one of those used by the plugin.
+    if ($filearea !== 'tool_sumitnegi') {
+        return false;
+    }
+
+    // Make sure the user is logged and course access.
+    require_login($course, false);
+
+    // Check the relevant capabilities - these may vary depending on the filearea being accessed.
+    if (!has_capability('tool/sumitnegi:view', $context)) {
+        return false;
+    }
+
+    $itemid = array_shift($args); // The first item in the $args array.
+
+    // Extract the filename / filepath from the $args array.
+    $filename = array_pop($args); // The last item in the $args array.
+    if (!$args) {
+        $filepath = '/';
+    } else {
+        $filepath = '/'.implode('/', $args).'/';
+    }
+
+    // Retrieve the file from the Files API.
+    $fs = get_file_storage();
+    $file = $fs->get_file($context->id, 'tool_sumitnegi', $filearea, $itemid, $filepath, $filename);
+    if (!$file) {
+        return false; // The file does not exist.
+    }
+
+    // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
+    send_stored_file($file, 86400, 0, $forcedownload, $options);
+}

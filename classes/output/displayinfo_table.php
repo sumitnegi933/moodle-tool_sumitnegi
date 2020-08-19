@@ -22,7 +22,7 @@
  */
 
 namespace tool_sumitnegi\output;
-
+use tool_sumitnegi\api as tool_sumitnegi_api;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/tablelib.php');
 /**
@@ -35,17 +35,18 @@ class displayinfo_table extends \table_sql {
     /**
      * displayinfo object contruction function
      *
-     * @param [type] $uniqueid
-     * @param [type] $courseid
+     * @param string $uniqueid
+     * @param mixed $courseid
      */
     public function __construct($uniqueid, $courseid = null) {
         parent::__construct($uniqueid);
 
         // Define the list of columns to show.
-        $columns = ['name', 'completed', 'priority', 'timecreated', 'timemodified'];
+        $columns = ['name', 'description', 'completed', 'priority', 'timecreated', 'timemodified'];
         // Define the titles of columns to show in header.
         $headers = [
             get_string('name', 'tool_sumitnegi'),
+            get_string('description', 'tool_sumitnegi'),
             get_string('completed', 'tool_sumitnegi'),
             get_string('priority', 'tool_sumitnegi'),
             get_string('timecreated', 'tool_sumitnegi'),
@@ -67,7 +68,7 @@ class displayinfo_table extends \table_sql {
     /**
      * Get name information
      *
-     * @param [type] $row
+     * @param object $row
      * @return string name
      */
     protected function col_name($row) {
@@ -93,7 +94,7 @@ class displayinfo_table extends \table_sql {
     /**
      * Get last updated time
      *
-     * @param [type] $row
+     * @param object $row
      * @return string Human readable updated date and time
      */
     protected function col_timemodified($row) {
@@ -106,7 +107,7 @@ class displayinfo_table extends \table_sql {
     /**
      * Get completion status
      *
-     * @param [type] $row
+     * @param object $row
      * @return string completion status yes/no
      */
     protected function col_completed($row) {
@@ -119,7 +120,7 @@ class displayinfo_table extends \table_sql {
     /**
      * Get priority
      *
-     * @param [type] $row
+     * @param object $row
      * @return string priority yes/no
      */
     protected function col_priority($row) {
@@ -132,7 +133,7 @@ class displayinfo_table extends \table_sql {
     /**
      * Allow edit record
      *
-     * @param [type] $row
+     * @param object $row
      * @return string link of for editing
      */
     protected function col_edit($row) {
@@ -146,5 +147,19 @@ class displayinfo_table extends \table_sql {
              return $editurl . ' | ' .$deleteurl;
         }
         return '';
+    }
+
+    /**
+     * Get description of enrty
+     *
+     * @param object $row
+     * @return string Entry Description
+     */
+    protected function col_description($row) {
+        $options = tool_sumitnegi_api::editor_options();
+        $context = \context_course::instance($row->courseid);
+        $description = file_rewrite_pluginfile_urls($row->description, 'pluginfile.php',
+            $context->id, 'tool_sumitnegi', 'entry', $row->id, $options);
+        return format_text($description, $row->descriptionformat, $options);
     }
 }
