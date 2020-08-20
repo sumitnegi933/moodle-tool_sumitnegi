@@ -46,17 +46,21 @@ class api {
         $entry->courseid = $data->courseid;
         $entry->timecreated = time();
         $entry->timemodified = time();
+        if (isset($data->description)) {
+            $entry->description = $data->description;
+            $entry->descriptionformat = 1;
+        }
         if ($entryid = $DB->insert_record('tool_sumitnegi', $entry)) {
             $context = \context_course::instance($data->courseid);
             $upateentry = new \stdClass();
             $upateentry->id = $entryid;
-            if ($data->description_editor) {
+            if (!empty($data->description_editor)) {
                 $data = file_postupdate_standard_editor($data, 'description', self::editor_options(),
                     $context, 'tool_sumitnegi', 'entry', $entryid);
-                $upateentry->description = $data['description'];
+                $upateentry->description = $data->description;
                 $upateentry->descriptionformat = 1;
+                self::update($upateentry, true);
             }
-            self::update($upateentry, true);
             return $entryid;
         }
         return 0;
@@ -82,7 +86,10 @@ class api {
             $entry->name = $data->name;
             $entry->completed = $data->completed ?? 0;
             $entry->timemodified = time();
-            if ($data->description_editor) {
+            if (isset($data->description)) {
+                $entry->description = $data->description;
+                $entry->descriptionformat = 1;
+            } else if (!empty($data->description_editor)) {
                 $context = \context_course::instance($data->courseid);
                 $data = file_postupdate_standard_editor($data, 'description', self::editor_options(),
                     $context, 'tool_sumitnegi', 'entry', $data->id);
@@ -90,6 +97,7 @@ class api {
                 $entry->descriptionformat = 1;
             }
         } else {
+            $entry = new \stdClass();
             $entry = $data;
         }
         return $DB->update_record('tool_sumitnegi', $entry);
