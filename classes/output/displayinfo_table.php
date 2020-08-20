@@ -143,7 +143,7 @@ class displayinfo_table extends \table_sql {
              get_string('edit'), ['title' => get_string('editentrytitle', 'tool_sumitnegi', format_string($row->name))]);
             // Delete record link.
             $deleteurl = \html_writer::link(new \moodle_url('/admin/tool/sumitnegi/edit.php',
-             ['delete' => $row->id, 'sesskey' => sesskey()]), get_string('delete'));
+             ['delete' => $row->id, 'sesskey' => sesskey()]), get_string('delete'),array('item-id' => $row->id,'class' => 'item-delete'));
              return $editurl . ' | ' .$deleteurl;
         }
         return '';
