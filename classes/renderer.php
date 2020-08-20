@@ -14,28 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- *  tool_sumitnegi.
+ *  tool_sumitnegi render.
  *
  * @package   tool_sumitnegi
  * @copyright 2020, Sumit Negi
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+use tool_sumitnegi\output\main;
 
-require_once(__DIR__ . '/../../../config.php');
-use tool_sumitnegi\output;
-global $DB, $PAGE, $OUTPUT;
-$courseid = optional_param('courseid', SITEID, PARAM_INT);
-require_login();
-$coursecontext = context_course::instance($courseid);
-require_capability('tool/sumitnegi:view', $coursecontext);
-$url = new moodle_url('/admin/tool/sumitnegi/index.php', ['courseid' => $courseid]);
-$PAGE->set_context($coursecontext);
-$PAGE->set_url($url);
-$PAGE->set_pagelayout('report');
-$PAGE->set_title(get_string('title', 'tool_sumitnegi'));
-$PAGE->set_heading(get_string('pluginname', 'tool_sumitnegi'));
-$data = new tool_sumitnegi\output\main($courseid);
-$output = $PAGE->get_renderer('tool_sumitnegi');
-echo $output->header();
-echo $output->render($data);
-echo $output->footer();
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ *  tool_sumitnegi render.
+ *
+ * @package   tool_sumitnegi
+ * @copyright 2020, Sumit Negi
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class tool_sumitnegi_renderer extends plugin_renderer_base {
+    /**
+     * Main renderer
+     *
+     * @param main $main
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_main(tool_sumitnegi\output\main $main) {
+        $context = $main->export_for_template($this);
+        return $this->render_from_template('tool_sumitnegi/display', $context);
+    }
+
+}
