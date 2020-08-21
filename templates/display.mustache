@@ -42,8 +42,8 @@
     </div>
 </div>
 {{#js}}
-    require(['tool_sumitnegi/confirm'], function(c) {
-
+    require(['tool_sumitnegi/confirm'], function(sc) {
+        sc.registerEvent('.item-delete');
     });
 
 {{/js}}

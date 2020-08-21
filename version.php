@@ -21,8 +21,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
-$plugin->version = 2020082000;
+$plugin->version = 2020082100;
 $plugin->requires = 2020060900;
 $plugin->component = 'tool_sumitnegi';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '2.2';
+$plugin->release = '2.3';

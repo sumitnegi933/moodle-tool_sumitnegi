@@ -14,7 +14,6 @@ Feature: My first behat test with the plugin
       | user     | course | role           |
       | teacher1 | SC     | editingteacher |
 
-  @javascript
   Scenario: Add / Edit Entry
     When I log in as "teacher1"
     And I am on "SC" course homepage
@@ -31,8 +30,7 @@ Feature: My first behat test with the plugin
     And I press "Save changes"
     And I log out
 
-  @javascript
-  Scenario: Delete Entry
+  Scenario: Delete Entry when javascript is disabled
     When I log in as "teacher1"
     And I am on "SC" course homepage
     And I navigate to "My first Moodle plugin" in current page administration
@@ -44,4 +42,18 @@ Feature: My first behat test with the plugin
     And I press "Save changes"
     And I click on "Delete" "link" in the "Behat entry 1" "table_row"
     And I should not see "Behat entry 1"
+    And I log out
+  @javascript
+  Scenario: Delete Entry when javascript is enabled
+    When I log in as "teacher1"
+    And I am on "SC" course homepage
+    And I navigate to "My first Moodle plugin" in current page administration
+    And I click on "Add" "button"
+    And I set the following fields to these values:
+      | Name      | Behat entry 1 |
+      | Completed | 0             |
+      | Description | Updated Dummy Description|
+    And I press "Save changes"
+    And I click on "Delete" "link" in the "Behat entry 1" "table_row"
+    And I press "Yes"
     And I log out

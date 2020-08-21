@@ -23,6 +23,8 @@
 $string['completed'] = 'Completed';
 $string['course'] = 'Course';
 $string['courseinfo'] = 'Course details';
+$string['deleteconfirmtitle'] = 'Entry deletion confirmation';
+$string['deleteconfirmmessage'] = 'Are you sure want to delete?';
 $string['description'] = 'Description';
 $string['editentrytitle'] = 'Edit entry {$a}';
 $string['helloworld'] = 'Hello world course id:{$a}';
